@@ -5,7 +5,32 @@ let tasks = []
 let taskId = 0
 
 inputAddButton.addEventListener('click', addTask)
+tasksContainer.addEventListener('click', deteleTask)
+tasksContainer.addEventListener('change', isCheckedTask)
 
+function renderTask() {
+  tasksContainer.innerHTML = ''
+
+  tasks.forEach((item) => {
+    const newTask = document.createElement('div')
+    newTask.classList.add('task')
+    newTask.dataset.id = item.id
+
+    newTask.innerHTML = `
+      <label class="task-label">
+        <input class="task-checkbox-input" type="checkbox" ${item.checked ? 'checked' : ''} />
+        <span class="task-checkbox"></span>
+        <span class="task-name">${item.text}</span>
+      </label>
+      <button class="task-close">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    `
+    tasksContainer.append(newTask)
+  })
+}
 
 function addTask() {
   const inputValue = input.value.trim()
@@ -22,29 +47,30 @@ function addTask() {
   })
 
   input.value = ''
-  renderTask(tasks)
+  renderTask()
 }
 
-function renderTask(array) {
-  tasksContainer.innerHTML = ''
+function deteleTask(e) {
+  const deleteButton = e.target.closest('.task-close')
+  if (!deleteButton) return
+
+  const taskElement = deleteButton.closest('.task')
+  const elementId = Number(taskElement.dataset.id)
+
+  tasks = tasks.filter((item) => item.id !== elementId)
+
+  renderTask()
+}
+
+function isCheckedTask(e) {
+  const checkboxTask = e.target.closest('.task-checkbox-input')
+  if (!checkboxTask) return
+
+  const taskElement = checkboxTask.closest('.task')
+  const elementId = Number(taskElement.dataset.id)
+  const task = tasks.find((item) => item.id === elementId)
+
+  task.checked = checkboxTask.checked
   
-  array.forEach((item) => {
-    const newTask = document.createElement('div')
-    newTask.classList.add('task');
-    newTask.dataset.id = item.id;
-    
-    newTask.innerHTML = `
-      <label class="task-label">
-        <input class="task-checkbox-input" type="checkbox" />
-        <span class="task-checkbox"></span>
-        <span class="task-name">${item.text}</span>
-      </label>
-      <button class="task-close">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-      </button>
-    `
-    tasksContainer.append(newTask)
-  })
+  renderTask()
 }
