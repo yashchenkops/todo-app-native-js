@@ -9,12 +9,13 @@
 :root {
   color-scheme: light dark;
 
-  --bg: #f8fafc;
+  --bg: #f0f0f0;
   --surface: #ffffff;
   --text: #1e293b;
   --text-secondary: #64748b;
   --border: #e2e8f0;
   --primary: #3b82f6;
+  --error: #f02020;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,6 +38,7 @@ body {
   display: flex;
   background-color: var(--bg);
   font-family: 'Montserrat', sans-serif;
+  padding: 10px;
 }
 
 button {
@@ -71,16 +73,25 @@ input[type="checkbox"] {
 }
 
 .input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
 }
 
 .input {
   padding: 20px;
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 30px 0 0 30px;
   width: 80%;
   font-size: 18px;
+}
+
+.input-error {
+  position: absolute;
+  left: 20px;
+  bottom: -20px;
+  color: var(--error);
+  font-size: 14px;
 }
 
 .input-add {
@@ -99,17 +110,19 @@ input[type="checkbox"] {
 .tasks {
   display: flex;
   flex-direction: column;
+  margin-top: 30px;
 }
 
 .task {
   display: flex;
-  align-items: center;
-  margin-top: 20px;
+  
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
 }
 
 .task-label {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
@@ -123,6 +136,7 @@ input[type="checkbox"] {
   border: var(--border) 2px solid;
   border-radius: 50%;
   transition: .25s;
+  flex-shrink: 0;
 
   &:hover {
     opacity: .7;
@@ -146,6 +160,7 @@ input[type="checkbox"] {
   width: 20px;
   height: 20px;
   transition: .25s;
+  flex-shrink: 0;
 
   &:hover {
     opacity: .7;

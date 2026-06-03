@@ -1,6 +1,7 @@
 const input = document.querySelector('.input')
 const inputAddButton = document.querySelector('.input-add')
 const tasksContainer = document.querySelector('.tasks')
+const inputWrapper = document.querySelector('.input-wrapper')
 let tasks = []
 let taskId = 0
 
@@ -36,10 +37,12 @@ function addTask() {
   const inputValue = input.value.trim()
 
   if (inputValue === '') {
-    alert('Empty field!')
+    showError()
     return
   }
-
+  
+  hideError()
+  
   tasks.push({
     id: taskId++,
     text: inputValue,
@@ -47,7 +50,6 @@ function addTask() {
   })
 
   input.value = ''
-
   setLocalStorage()
   renderTask()
 }
@@ -91,12 +93,32 @@ function getLocalStorage() {
   tasks = JSON.parse(data)
 
   // fix id after reload
-  const itemId = tasks.map(item => item.id)
+  const itemId = tasks.map((item) => item.id)
   const biggestId = Math.max(...itemId)
-  
-  taskId = biggestId + 1;
-   
+
+  taskId = biggestId + 1
+
   renderTask()
+}
+
+function showError() {
+  const errorInput = document.createElement('p')
+
+  errorInput.classList.add('input-error')
+  errorInput.innerText = 'Empty field!'
+
+  const existingError = document.querySelector('.input-error')
+
+  if (existingError) return
+
+  inputWrapper.append(errorInput)
+}
+
+function hideError() {
+  const existingError = document.querySelector('.input-error')
+  if (!existingError) return
+
+  existingError.remove()
 }
 
 getLocalStorage()
