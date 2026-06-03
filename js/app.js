@@ -47,6 +47,8 @@ function addTask() {
   })
 
   input.value = ''
+
+  setLocalStorage()
   renderTask()
 }
 
@@ -59,6 +61,7 @@ function deteleTask(e) {
 
   tasks = tasks.filter((item) => item.id !== elementId)
 
+  setLocalStorage()
   renderTask()
 }
 
@@ -71,6 +74,29 @@ function isCheckedTask(e) {
   const task = tasks.find((item) => item.id === elementId)
 
   task.checked = checkboxTask.checked
-  
+
+  setLocalStorage()
   renderTask()
 }
+
+function setLocalStorage() {
+  const jsonString = JSON.stringify(tasks)
+  localStorage.setItem('tasks', jsonString)
+}
+
+function getLocalStorage() {
+  const data = localStorage.getItem('tasks')
+  if (!data) return
+
+  tasks = JSON.parse(data)
+
+  // fix id after reload
+  const itemId = tasks.map(item => item.id)
+  const biggestId = Math.max(...itemId)
+  
+  taskId = biggestId + 1;
+   
+  renderTask()
+}
+
+getLocalStorage()
