@@ -6,6 +6,14 @@ let tasks = []
 let taskId = 0
 
 inputAddButton.addEventListener('click', addTask)
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    addTask()
+  }
+
+  return
+  
+})
 tasksContainer.addEventListener('click', deteleTask)
 tasksContainer.addEventListener('change', isCheckedTask)
 
@@ -40,7 +48,7 @@ function addTask() {
     showError()
     return
   }
-  
+
   hideError()
   
   tasks.push({
